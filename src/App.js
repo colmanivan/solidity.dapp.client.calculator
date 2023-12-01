@@ -25,6 +25,7 @@ function App() {
 
   async function initializeProvider() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     let sc = new ethers.Contract(ContractAddress, sc_abi, signer);
     return sc;
@@ -49,7 +50,7 @@ function App() {
   async function eventAdd(e) {
     setIsLoading(true);
     try {
-      const contract = await initializeProvider();      
+      const contract = await initializeProvider();
       const txn = await contract.add(number);
       const txnDetails = await txn.wait();
       if (txnDetails.status === 1) {
@@ -61,11 +62,10 @@ function App() {
     setIsLoading(false);
     setNumber("");
   }
-  
+
   async function eventSub(e) {
     setIsLoading(true);
     try {
-      
       const contract = await initializeProvider();
       const txn = await contract.sub(number);
       const txnDetails = await txn.wait();
@@ -76,12 +76,12 @@ function App() {
       console.log("error call sub: ", e);
     }
     setIsLoading(false);
-    setNumber("");    
+    setNumber("");
   }
 
   async function eventReset(e) {
     setIsLoading(true);
-    try {      
+    try {
       const contract = await initializeProvider();
       const txn = await contract.reset();
       const txnDetails = await txn.wait();
@@ -92,7 +92,7 @@ function App() {
       console.log("error call reset: ", e);
     }
     setIsLoading(false);
-    setNumber("");    
+    setNumber("");
   }
 
   async function eventChangeNumber(e) {
